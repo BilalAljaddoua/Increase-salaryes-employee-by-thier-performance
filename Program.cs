@@ -6,6 +6,8 @@ namespace Bussiness_Layer
 {
     internal class Program
     {
+        public enum enEvaluate { High = 0, Meduem = 1, Low = 2 };
+
         private struct stEmployeesInfo
         {
             public string Name { get; set; }
@@ -15,7 +17,7 @@ namespace Bussiness_Layer
 
             public int Performance { get; set; }
 
-
+            public enEvaluate Evaluate { get; set; }
         }
 
         private static void Main(string[] args)
@@ -40,81 +42,62 @@ namespace Bussiness_Layer
             for (int i = 0; i < ListofEmployee.Count; i++)
             {
                 stEmployeesInfo employee = ListofEmployee[i];  // استخراج العنصر
-                switch (employee.Department)
+
+
+                if (employee.Performance < 100 && employee.Performance > 80)
                 {
-                    case "IT":      
-                        {
-                            if (employee.Performance < 90 && employee.Performance > 0)
-                            {
-                                employee.Bonus = employee.Salary * 1.15;
-                            }
-                            if (employee.Performance < 75 && employee.Performance > 0)
-                            {
-                                employee.Bonus = employee.Salary * 1.1;
-                            }
-                            if (employee.Performance < 60 && employee.Performance > 0)
-                            {
-                                employee.Bonus = employee.Salary * 1.05;
-                            }
-                            break;
-                        }
-                    case "HR":
-                            {
-
-                            if (employee.Performance < 90 && employee.Performance > 0)
-                            {
-                                employee.Bonus = employee.Salary * 1.12;
-                            }
-                            if (employee.Performance < 75 && employee.Performance > 0)
-                            {
-                                employee.Bonus = employee.Salary * 0.8;
-                            }
-                            if (employee.Performance < 60 && employee.Performance > 0)
-                            {
-                                employee.Bonus = employee.Salary * 0.5;
-                            }
-                            break;
-                        }
-                    case "Marketing":
-                        {
-
-                            if (employee.Performance < 90 && employee.Performance > 0)
-                            {
-                                employee.Bonus = employee.Salary * 1.1 ;
-                            }
-                            if (employee.Performance < 75 && employee.Performance > 0)
-                            {
-                                employee.Bonus = employee.Salary * 0.6;
-                            }
-                            if (employee.Performance < 60 && employee.Performance > 0)
-                            {
-                                employee.Bonus = employee.Salary * 0.3;
-                            }
-                            break;
-                        }
+                    employee.Evaluate = enEvaluate.High;
                 }
+                if (employee.Performance < 80 && employee.Performance > 60)
+                {
+                    employee.Evaluate = enEvaluate.Meduem;
+                }
+                if (employee.Performance < 60 && employee.Performance > 0)
+                {
+                    employee.Evaluate = enEvaluate.Low;
+
+                }
+
+
+
                 ListofEmployee[i] = employee;  // إعادة تعيين العنصر المعدل إلى القائمة
             }
 
 
 
+            int HighCount = 0;
+            int MedumCount = 0;
+            int LowCount = 0;
 
-            int count = 0;
+
             for (int i = 0; i < ListofEmployee.Count; i++)
             {
-                clsEmployees2 employee=new clsEmployees2 ();
-                employee.Name = ListofEmployee[i].Name;
-                employee.Department = ListofEmployee[i].Department;
-                employee.Salary = ListofEmployee[i].Salary;
-                employee.PerformanceRating = ListofEmployee[i].Performance;
-                employee.Bonus = ListofEmployee[i].Bonus;
-                if(employee.Save())
-                {
-                    count++;
-                }
 
+                switch (ListofEmployee[i].Evaluate)
+                {
+                    case enEvaluate.High:
+                        {
+                            HighCount++;
+                            break;
+                        }
+                    case enEvaluate.Meduem:
+                        {
+                            MedumCount++;
+                            break;
+                        }
+                    case enEvaluate.Low:
+                        {
+                            LowCount++;
+                            break;
+
+                        }
+ 
+                }
             }
-            Console.WriteLine($"there are {count} updates successfully");
+            Console.WriteLine("The number of high is : " + HighCount);
+            Console.WriteLine("The number of Medum is : " + MedumCount);
+            Console.WriteLine("The number of Low is : " + LowCount);
+
         }
     }
 }
